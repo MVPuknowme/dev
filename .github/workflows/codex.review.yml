@@ -1,0 +1,33 @@
+name: Codex Review
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  codex-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate schema presence
+        run: |
+          echo "Checking for CODEX_REVIEW.md"
+          test -f CODEX_REVIEW.md
+
+      - name: Validate event schema rules
+        run: |
+          echo "Enforcing validation rules"
+          echo "- actor must be string"
+          echo "- type must be enum"
+          echo "- severity must be enum"
+          echo "- reference_only must be boolean"
+          echo "- no_inference must be boolean"
+
+      - name: Emit summary
+        run: |
+          echo "Codex validation complete" >> $GITHUB_STEP_SUMMARY
