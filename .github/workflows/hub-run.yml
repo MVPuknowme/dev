@@ -1,0 +1,25 @@
+name: Run hub.exe
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  run-hub:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify hub.exe exists
+        shell: pwsh
+        run: |
+          if (-not (Test-Path .\hub.exe)) {
+            Write-Error "hub.exe not found at repository root"
+          }
+
+      - name: Run hub.exe
+        shell: pwsh
+        run: .\hub.exe gspeed
